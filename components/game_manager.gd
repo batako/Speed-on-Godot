@@ -5,16 +5,16 @@ extends Node
 @export var CardScene: PackedScene
 
 @export var PlayerDeckSlot: Node
-@export var PlayerCardSlot1: Node
-@export var PlayerCardSlot2: Node
-@export var PlayerCardSlot3: Node
-@export var PlayerCardSlot4: Node
+@export var PlayerFieldHandSlot1: Node
+@export var PlayerFieldHandSlot2: Node
+@export var PlayerFieldHandSlot3: Node
+@export var PlayerFieldHandSlot4: Node
 
 @export var EnemyDeckSlot: Node
-@export var EnemyCardSlot1: Node
-@export var EnemyCardSlot2: Node
-@export var EnemyCardSlot3: Node
-@export var EnemyCardSlot4: Node
+@export var EnemyFieldHandSlot1: Node
+@export var EnemyFieldHandSlot2: Node
+@export var EnemyFieldHandSlot3: Node
+@export var EnemyFieldHandSlot4: Node
 
 @export var LeadSlot1: Node
 @export var LeadSlot2: Node
@@ -108,29 +108,11 @@ func set_lead_card_from_draw(owner_type: String, slot: Node) -> void:
 
 func set_lead_card(slot: Node, suit: String, value: int) -> void:
 	add_card(slot, "field", suit, value)
-	access_variable_by_name(
-		to_snake_case(slot.name),
+	Global.access_variable_by_name(
+		self,
+		Global.to_snake_case(slot.name),
 		{ "suit": suit, "value": value }
 	)
-
-
-func to_snake_case(input_string: String) -> String:
-	var snake_case_string = ""
-
-	for i in range(input_string.length()):
-		var char = input_string.substr(i, 1)
-		if char >= "A" and char <= "Z":
-			if i > 0:
-				snake_case_string += "_"
-			snake_case_string += char.to_lower()
-		else:
-			snake_case_string += char
-
-	return snake_case_string
-
-
-func access_variable_by_name(variable_name: String, value):
-	set(variable_name, value)
 
 
 func add_card(root_node: Node, owner_type: String, suit: String, value: int) -> void:
@@ -177,9 +159,19 @@ func get_empty_field_hand_slot(owner_type: String) -> Node:
 func get_field_hand_slots(owner_type: String) -> Array:
 	match owner_type:
 		"player":
-			return [PlayerCardSlot1, PlayerCardSlot2, PlayerCardSlot3, PlayerCardSlot4]
+			return [
+				PlayerFieldHandSlot1,
+				PlayerFieldHandSlot2,
+				PlayerFieldHandSlot3,
+				PlayerFieldHandSlot4,
+			]
 		"enemy":
-			return [EnemyCardSlot1, EnemyCardSlot2, EnemyCardSlot3, EnemyCardSlot4]
+			return [
+				EnemyFieldHandSlot1,
+				EnemyFieldHandSlot2,
+				EnemyFieldHandSlot3,
+				EnemyFieldHandSlot4,
+			]
 		_:
 			push_error("不正な owner_type です。:  " + owner_type)
 			return []
