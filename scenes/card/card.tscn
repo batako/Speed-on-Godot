@@ -68,6 +68,14 @@ region = Rect2(88, 248, 88, 124)
 atlas = ExtResource("2_1rv58")
 region = Rect2(176, 248, 88, 124)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_0bw86"]
+atlas = ExtResource("6_j6bhe")
+region = Rect2(0, 0, 88, 140)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_errt1"]
+atlas = ExtResource("6_j6bhe")
+region = Rect2(88, 0, 88, 140)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_tqvup"]
 atlas = ExtResource("3_xqwlm")
 region = Rect2(0, 0, 88, 124)
@@ -224,14 +232,6 @@ region = Rect2(88, 248, 88, 124)
 atlas = ExtResource("5_bf70f")
 region = Rect2(176, 248, 88, 124)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_0bw86"]
-atlas = ExtResource("6_j6bhe")
-region = Rect2(0, 0, 88, 140)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_errt1"]
-atlas = ExtResource("6_j6bhe")
-region = Rect2(88, 0, 88, 140)
-
 [sub_resource type="SpriteFrames" id="SpriteFrames_d8r5m"]
 animations = [{
 "frames": [{
@@ -290,6 +290,17 @@ animations = [{
 }],
 "loop": false,
 "name": &"club",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0bw86")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_errt1")
+}],
+"loop": false,
+"name": &"deck",
 "speed": 5.0
 }, {
 "frames": [{
@@ -432,17 +443,6 @@ animations = [{
 "loop": false,
 "name": &"spade",
 "speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_0bw86")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_errt1")
-}],
-"loop": false,
-"name": &"stack",
-"speed": 5.0
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0jt05"]
@@ -453,7 +453,7 @@ script = ExtResource("1_mv30y")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_d8r5m")
-animation = &"back"
+animation = &"deck"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_0jt05")

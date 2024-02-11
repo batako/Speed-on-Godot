@@ -1,13 +1,114 @@
-[gd_scene load_steps=3 format=3 uid="uid://8xvl5u4lnkyv"]
+[gd_scene load_steps=4 format=3 uid="uid://8xvl5u4lnkyv"]
 
+[ext_resource type="Texture2D" uid="uid://2rulcwbn2dek" path="res://assets/images/cards/Clubs-88x124.png" id="3_vbuhv"]
 [ext_resource type="PackedScene" uid="uid://d1kvtgj8cns7a" path="res://scenes/card/card.tscn" id="4_h3vpj"]
 [ext_resource type="Script" path="res://components/game_manager.gd" id="5_auip6"]
 
 [node name="Main" type="Node2D"]
 
-[node name="GameManager" type="Node" parent="." node_paths=PackedStringArray("CardRootNode")]
+[node name="GameManager" type="Node" parent="." node_paths=PackedStringArray("CardRootNode", "PlayerDeckSlot", "PlayerCardSlot1", "PlayerCardSlot2", "PlayerCardSlot3", "PlayerCardSlot4", "EnemyDeckSlot", "EnemyCardSlot1", "EnemyCardSlot2", "EnemyCardSlot3", "EnemyCardSlot4")]
 script = ExtResource("5_auip6")
 CardRootNode = NodePath("../CardRootNode")
 CardScene = ExtResource("4_h3vpj")
+PlayerDeckSlot = NodePath("../CardSlots/Player/PlayerDeckSlot")
+PlayerCardSlot1 = NodePath("../CardSlots/Player/PlayerCardSlot1")
+PlayerCardSlot2 = NodePath("../CardSlots/Player/PlayerCardSlot2")
+PlayerCardSlot3 = NodePath("../CardSlots/Player/PlayerCardSlot3")
+PlayerCardSlot4 = NodePath("../CardSlots/Player/PlayerCardSlot4")
+EnemyDeckSlot = NodePath("../CardSlots/Enemy/EnemyDeckSlot")
+EnemyCardSlot1 = NodePath("../CardSlots/Enemy/EnemyCardSlot1")
+EnemyCardSlot2 = NodePath("../CardSlots/Enemy/EnemyCardSlot2")
+EnemyCardSlot3 = NodePath("../CardSlots/Enemy/EnemyCardSlot3")
+EnemyCardSlot4 = NodePath("../CardSlots/Enemy/EnemyCardSlot4")
 
 [node name="CardRootNode" type="Node" parent="."]
+
+[node name="CardSlots" type="Node" parent="."]
+
+[node name="LeadSlot1" type="Sprite2D" parent="CardSlots"]
+position = Vector2(208, 260)
+texture = ExtResource("3_vbuhv")
+hframes = 5
+vframes = 3
+frame = 13
+
+[node name="LeadSlot2" type="Sprite2D" parent="CardSlots"]
+position = Vector2(341, 262)
+texture = ExtResource("3_vbuhv")
+hframes = 5
+vframes = 3
+frame = 13
+
+[node name="Player" type="Node" parent="CardSlots"]
+
+[node name="PlayerDeckSlot" type="Sprite2D" parent="CardSlots/Player"]
+position = Vector2(72, 255)
+texture = ExtResource("3_vbuhv")
+hframes = 5
+vframes = 3
+frame = 13
+
+[node name="PlayerCardSlot1" type="Sprite2D" parent="CardSlots/Player"]
+position = Vector2(82, 424)
+texture = ExtResource("3_vbuhv")
+hframes = 5
+vframes = 3
+frame = 13
+
+[node name="PlayerCardSlot2" type="Sprite2D" parent="CardSlots/Player"]
+position = Vector2(208, 431)
+texture = ExtResource("3_vbuhv")
+hframes = 5
+vframes = 3
+frame = 13
+
+[node name="PlayerCardSlot3" type="Sprite2D" parent="CardSlots/Player"]
+position = Vector2(345, 424)
+texture = ExtResource("3_vbuhv")
+hframes = 5
+vframes = 3
+frame = 13
+
+[node name="PlayerCardSlot4" type="Sprite2D" parent="CardSlots/Player"]
+position = Vector2(478, 430)
+texture = ExtResource("3_vbuhv")
+hframes = 5
+vframes = 3
+frame = 13
+
+[node name="Enemy" type="Node" parent="CardSlots"]
+
+[node name="EnemyDeckSlot" type="Sprite2D" parent="CardSlots/Enemy"]
+position = Vector2(479, 255)
+texture = ExtResource("3_vbuhv")
+hframes = 5
+vframes = 3
+frame = 13
+
+[node name="EnemyCardSlot1" type="Sprite2D" parent="CardSlots/Enemy"]
+position = Vector2(480, 99)
+texture = ExtResource("3_vbuhv")
+hframes = 5
+vframes = 3
+frame = 13
+
+[node name="EnemyCardSlot2" type="Sprite2D" parent="CardSlots/Enemy"]
+position = Vector2(336, 104)
+texture = ExtResource("3_vbuhv")
+hframes = 5
+vframes = 3
+frame = 13
+
+[node name="EnemyCardSlot3" type="Sprite2D" parent="CardSlots/Enemy"]
+position = Vector2(207, 101)
+texture = ExtResource("3_vbuhv")
+hframes = 5
+vframes = 3
+frame = 13
+
+[node name="EnemyCardSlot4" type="Sprite2D" parent="CardSlots/Enemy"]
+position = Vector2(77, 94)
+texture = ExtResource("3_vbuhv")
+hframes = 5
+vframes = 3
+frame = 13
