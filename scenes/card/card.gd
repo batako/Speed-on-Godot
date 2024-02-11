@@ -42,7 +42,7 @@ func _on_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> voi
 			if suit == "deck":
 				emit_signal("draw_" + owner_type_to_string() + "_card")
 			else:
-				emit_signal("selected_card", suit, value)
+				emit_signal("selected_card", self)
 
 
 func owner_type_to_string() -> String:

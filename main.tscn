@@ -6,7 +6,7 @@
 
 [node name="Main" type="Node2D"]
 
-[node name="GameManager" type="Node" parent="." node_paths=PackedStringArray("CardRootNode", "PlayerDeckSlot", "PlayerCardSlot1", "PlayerCardSlot2", "PlayerCardSlot3", "PlayerCardSlot4", "EnemyDeckSlot", "EnemyCardSlot1", "EnemyCardSlot2", "EnemyCardSlot3", "EnemyCardSlot4")]
+[node name="GameManager" type="Node" parent="." node_paths=PackedStringArray("CardRootNode", "PlayerDeckSlot", "PlayerCardSlot1", "PlayerCardSlot2", "PlayerCardSlot3", "PlayerCardSlot4", "EnemyDeckSlot", "EnemyCardSlot1", "EnemyCardSlot2", "EnemyCardSlot3", "EnemyCardSlot4", "LeadSlot1", "LeadSlot2")]
 script = ExtResource("5_auip6")
 CardRootNode = NodePath("../CardRootNode")
 CardScene = ExtResource("4_h3vpj")
@@ -20,6 +20,8 @@ EnemyCardSlot1 = NodePath("../CardSlots/Enemy/EnemyCardSlot1")
 EnemyCardSlot2 = NodePath("../CardSlots/Enemy/EnemyCardSlot2")
 EnemyCardSlot3 = NodePath("../CardSlots/Enemy/EnemyCardSlot3")
 EnemyCardSlot4 = NodePath("../CardSlots/Enemy/EnemyCardSlot4")
+LeadSlot1 = NodePath("../CardSlots/LeadSlot1")
+LeadSlot2 = NodePath("../CardSlots/LeadSlot2")
 
 [node name="CardRootNode" type="Node" parent="."]
 
