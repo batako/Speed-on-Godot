@@ -5,5 +5,10 @@ extends Node
 @export var pointing: Texture
 
 func _ready():
+	set_arrow()
+
+func set_arrow() -> void:
 	Input.set_custom_mouse_cursor(arrow, Input.CURSOR_ARROW)
-	Input.set_custom_mouse_cursor(pointing, Input.CURSOR_POINTING_HAND)
+
+func set_pointing() -> void:
+	Input.set_custom_mouse_cursor(pointing, Input.CURSOR_ARROW)

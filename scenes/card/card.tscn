@@ -1,4 +1,4 @@
-[gd_scene load_steps=65 format=3 uid="uid://d1kvtgj8cns7a"]
+[gd_scene load_steps=66 format=3 uid="uid://d1kvtgj8cns7a"]
 
 [ext_resource type="Texture2D" uid="uid://bgvvqp6o4ydu" path="res://assets/images/cards/Card_Back-88x124.png" id="1_dum2t"]
 [ext_resource type="Script" path="res://scenes/card/card.gd" id="1_mv30y"]
@@ -445,9 +445,15 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="Card" type="Node2D"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0jt05"]
+size = Vector2(88, 124)
+
+[node name="Card" type="Area2D"]
 script = ExtResource("1_mv30y")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_d8r5m")
 animation = &"back"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_0jt05")

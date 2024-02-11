@@ -1,21 +1,13 @@
-[gd_scene load_steps=6 format=3 uid="uid://8xvl5u4lnkyv"]
+[gd_scene load_steps=3 format=3 uid="uid://8xvl5u4lnkyv"]
 
-[ext_resource type="Script" path="res://components/cursor_component.gd" id="1_0nli2"]
-[ext_resource type="Texture2D" uid="uid://cereuah53kh67" path="res://assets/images/cursors/cursor-pointer-1.png" id="2_bvo7u"]
-[ext_resource type="Texture2D" uid="uid://8o6ifpidwx6e" path="res://assets/images/cursors/cursor-pointer-18.png" id="3_cg7ky"]
 [ext_resource type="PackedScene" uid="uid://d1kvtgj8cns7a" path="res://scenes/card/card.tscn" id="4_h3vpj"]
 [ext_resource type="Script" path="res://components/game_manager.gd" id="5_auip6"]
 
 [node name="Main" type="Node2D"]
 
-[node name="CursorComponent" type="Node" parent="."]
-script = ExtResource("1_0nli2")
-arrow = ExtResource("2_bvo7u")
-pointing = ExtResource("3_cg7ky")
-
 [node name="GameManager" type="Node" parent="." node_paths=PackedStringArray("CardRootNode")]
 script = ExtResource("5_auip6")
 CardRootNode = NodePath("../CardRootNode")
-card = ExtResource("4_h3vpj")
+CardScene = ExtResource("4_h3vpj")
 
 [node name="CardRootNode" type="Node" parent="."]
