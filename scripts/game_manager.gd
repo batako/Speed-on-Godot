@@ -46,7 +46,7 @@ func _process(delta: float) -> void:
 	if timer >= status_check_interval_seconds:
 		timer = 0.0
 		
-		if !check_available_actions_for_player_and_enemy():
+		if !can_anyone_action():
 			start_round()
 
 
@@ -212,8 +212,11 @@ func get_first_child_of_first_present_node(nodes: Array) -> Node:
 	return null
 
 
-func check_available_actions_for_player_and_enemy() -> bool:
-	var value = false
+func can_anyone_action() -> bool:
+	return can_place_card_from_field_hand() or can_draw_from_deck("player") or can_draw_from_deck("enemy")
+
+
+func can_place_card_from_field_hand() -> bool:
 	var field_hand_slots = player_field_hand_slots + enemy_field_hand_slots
 	
 	for slot in field_hand_slots:
@@ -221,12 +224,19 @@ func check_available_actions_for_player_and_enemy() -> bool:
 			continue
 
 		var card = slot.get_child(0)
-		if !lead_slot1.value or is_adjacent_value(lead_slot1.value, card.value):
-			value = true
-		elif !lead_slot2.value or is_adjacent_value(lead_slot2.value, card.value):
-			value = true
+		if not lead_slot1.value or is_adjacent_value(lead_slot1.value, card.value):
+			return true
+		elif not lead_slot2.value or is_adjacent_value(lead_slot2.value, card.value):
+			return true
+
+	return false
+
+
+func can_draw_from_deck(owner_type: String) -> bool:
+	var card_deck = get_card_deck(owner_type)
+	var empty_slot = get_empty_field_hand_slot(owner_type)
 	
-	return value
+	return card_deck.size() > 0 and empty_slot
 
 
 func draw_card(owner_type: String) -> void:
