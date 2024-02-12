@@ -26,8 +26,9 @@ var enemy_card_deck: Array
 var lead_slot1: Dictionary = { "suit": null, "value": null }
 var lead_slot2: Dictionary = { "suit": null, "value": null }
 
-var slots: Array[Node] = []
-var field_hand_slots: Array[Node] = []
+var card_slots: Array[Node] = []
+var player_field_hand_slots: Array[Node] = []
+var enemy_field_hand_slots: Array[Node] = []
 
 var timer: float = 0
 
@@ -36,12 +37,16 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
+	if Global.current_state != Global.GameState.PLAYING:
+		timer = 0.0
+		return
+
 	timer += delta
 	
 	if timer >= status_check_interval_seconds:
 		timer = 0.0
 		
-		if not check_available_actions_for_player_and_enemy():
+		if !check_available_actions_for_player_and_enemy():
 			start_round()
 
 
@@ -63,33 +68,37 @@ func _selected_card(node: Area2D, is_cpu: bool = false) -> void:
 	elif !lead_slot2.value or is_adjacent_value(lead_slot2.value, node.value):
 		move_field_hand_to_lead(node, LeadSlot2)
 
+	check_victory_condition(node.owner_type_to_string())
+	
 
 func reset() -> void:
 	initialize_variables()
-	clear_slots()
+	clear_card_slots()
 	setup_deck()
 	set_field_hand_slot()
 	start_round()
 
 
 func initialize_variables() -> void:
-	field_hand_slots = [
+	player_field_hand_slots = [
 		PlayerFieldHandSlot1,
 		PlayerFieldHandSlot2,
 		PlayerFieldHandSlot3,
 		PlayerFieldHandSlot4,
+	]
+	enemy_field_hand_slots = [
 		EnemyFieldHandSlot1,
 		EnemyFieldHandSlot2,
 		EnemyFieldHandSlot3,
 		EnemyFieldHandSlot4,
 	]
-	slots = [
+	card_slots = [
 		LeadSlot1,
 		LeadSlot2,
 		PlayerDeckSlot,
 		EnemyDeckSlot,
 	]
-	slots += field_hand_slots
+	card_slots += player_field_hand_slots + enemy_field_hand_slots
 	
 	lead_slot1 = { "suit": null, "value": null }
 	lead_slot2 = { "suit": null, "value": null }
@@ -97,8 +106,8 @@ func initialize_variables() -> void:
 	Global.current_state = Global.GameState.PLAYING
 
 
-func clear_slots() -> void:
-	for slot in slots:
+func clear_card_slots() -> void:
+	for slot in card_slots:
 		remove_all_children(slot)
 
 
@@ -135,9 +144,6 @@ func set_field_hand_slot() -> void:
 
 
 func start_round() -> void:
-	if Global.current_state != Global.GameState.PLAYING:
-		return
-	
 	set_lead_card_from_deck_or_field_hand("player", LeadSlot1)
 	set_lead_card_from_deck_or_field_hand("enemy", LeadSlot2)
 
@@ -146,7 +152,7 @@ func set_lead_card_from_deck_or_field_hand(owner_type: String, slot: Node) -> vo
 	var card_deck = get_card_deck(owner_type)
 	
 	if card_deck.size() > 0:
-		var card = card_deck.pop_front()
+		var card = draw_card_from_deck(owner_type)
 		set_lead_card(slot, card.suit, card.value)
 	else:
 		var card = get_card_from_any_field_hand(owner_type)
@@ -155,6 +161,8 @@ func set_lead_card_from_deck_or_field_hand(owner_type: String, slot: Node) -> vo
 			card.queue_free()
 		else:
 			push_error(owner_type + " の山札と場札はありません。")
+
+	check_victory_condition(owner_type)
 
 
 func set_lead_card(slot: Node, suit: String, value: int) -> void:
@@ -193,8 +201,8 @@ func get_card_from_any_field_hand(owner_type: String) -> Area2D:
 		push_error("不正な owner_type です。:  " + owner_type)
 		return
 	
-	var card_slots = get_field_hand_slots(owner_type)
-	return get_first_child_of_first_present_node(card_slots)
+	var field_hand_slots = get_field_hand_slots(owner_type)
+	return get_first_child_of_first_present_node(field_hand_slots)
 
 
 func get_first_child_of_first_present_node(nodes: Array) -> Node:
@@ -202,6 +210,23 @@ func get_first_child_of_first_present_node(nodes: Array) -> Node:
 		if node.get_child_count() > 0:
 			return node.get_child(0)
 	return null
+
+
+func check_available_actions_for_player_and_enemy() -> bool:
+	var value = false
+	var field_hand_slots = player_field_hand_slots + enemy_field_hand_slots
+	
+	for slot in field_hand_slots:
+		if slot.get_child_count() == 0:
+			continue
+
+		var card = slot.get_child(0)
+		if !lead_slot1.value or is_adjacent_value(lead_slot1.value, card.value):
+			value = true
+		elif !lead_slot2.value or is_adjacent_value(lead_slot2.value, card.value):
+			value = true
+	
+	return value
 
 
 func draw_card(owner_type: String) -> void:
@@ -219,32 +244,22 @@ func draw_card(owner_type: String) -> void:
 
 
 func get_empty_field_hand_slot(owner_type: String) -> Node:
-	var card_slots = get_field_hand_slots(owner_type)
-	return find_first_empty_child_node(card_slots)
+	var field_hand_slots = get_field_hand_slots(owner_type)
+	return get_first_empty_child_node(field_hand_slots)
 
 
-func get_field_hand_slots(owner_type: String) -> Array:
+func get_field_hand_slots(owner_type: String) -> Array[Node]:
 	match owner_type:
 		"player":
-			return [
-				PlayerFieldHandSlot1,
-				PlayerFieldHandSlot2,
-				PlayerFieldHandSlot3,
-				PlayerFieldHandSlot4,
-			]
+			return player_field_hand_slots
 		"enemy":
-			return [
-				EnemyFieldHandSlot1,
-				EnemyFieldHandSlot2,
-				EnemyFieldHandSlot3,
-				EnemyFieldHandSlot4,
-			]
+			return enemy_field_hand_slots
 		_:
 			push_error("不正な owner_type です。:  " + owner_type)
 			return []
 
 
-func find_first_empty_child_node(nodes: Array) -> Node:
+func get_first_empty_child_node(nodes: Array) -> Node:
 	for node in nodes:
 		if node.get_child_count() == 0:
 			return node
@@ -255,10 +270,22 @@ func draw_card_from_deck(owner_type: String) -> Dictionary:
 	var card_deck = get_card_deck(owner_type)
 	
 	if card_deck.size() > 0:
-		return card_deck.pop_front()
+		var card = card_deck.pop_front()
+		clear_deck_slot_if_empty(owner_type)
+		return card
 	else:
 		push_error(owner_type + " の山札はありません。")
 		return {}
+
+
+func clear_deck_slot_if_empty(owner_type: String) -> void:
+	match owner_type:
+		"player":
+			if player_card_deck.size() == 0:
+				remove_all_children(PlayerDeckSlot)
+		"enemy":
+			if enemy_card_deck.size() == 0:
+				remove_all_children(EnemyDeckSlot)
 
 
 func get_card_deck(owner_type: String) -> Array:
@@ -294,17 +321,20 @@ func remove_all_children(node: Node):
 		child.queue_free()
 
 
-func check_available_actions_for_player_and_enemy() -> bool:
-	var value = false
+func check_victory_condition(owner_type: String) -> void:
+	if Global.current_state != Global.GameState.PLAYING:
+		return
 	
-	for slot in field_hand_slots:
-		if slot.get_child_count() == 0:
-			continue
+	var user_slots = get_field_hand_slots(owner_type)
+	var deck = get_card_deck(owner_type)
 
-		var card = slot.get_child(0)
-		if !lead_slot1.value or is_adjacent_value(lead_slot1.value, card.value):
-			value = true
-		elif !lead_slot2.value or is_adjacent_value(lead_slot2.value, card.value):
-			value = true
-	
-	return value
+	if are_all_nodes_without_children(user_slots) and deck.size() == 0:
+		Global.current_state = Global.GameState.END_GAME
+		print(owner_type + " の勝利")
+
+
+func are_all_nodes_without_children(nodes: Array) -> bool:
+	for node in nodes:
+		if node.get_child_count() > 0:
+			return false
+	return true

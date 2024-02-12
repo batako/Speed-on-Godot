@@ -11,6 +11,7 @@ enum GameState {
 
 var current_state = GameState.MAIN_MENU
 
+
 func set_arrow() -> void:
 	Input.set_custom_mouse_cursor(ARROW, Input.CURSOR_ARROW)
 
