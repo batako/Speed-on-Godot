@@ -42,12 +42,12 @@ func _draw_enemy_card() -> void:
 	draw_card("enemy")
 
 
-func _selected_card(node: Area2D) -> void:
+func _selected_card(node: Area2D, is_cpu: bool = false) -> void:
 	if !allow_lead_card:
 		print("カードを出せません。")
 		return
 	
-	if node.owner_type != node.OwnerType.PLAYER:
+	if !is_cpu and node.owner_type != node.OwnerType.PLAYER:
 		print("プレイヤーのカードではありません。")
 		return
 	
