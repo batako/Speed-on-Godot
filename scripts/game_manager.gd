@@ -325,6 +325,8 @@ func check_victory_condition(owner_type: String) -> void:
 	if Global.current_state != Global.GameState.PLAYING:
 		return
 	
+	await get_tree().process_frame
+	
 	var user_slots = get_field_hand_slots(owner_type)
 	var deck = get_card_deck(owner_type)
 
