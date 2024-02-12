@@ -1,16 +1,17 @@
 class_name CPUComponent
 extends Node
 
-@export var interval_seconds: float = 1
-
 @export var GameManager: Node
+
+@export var LeadSlot1: Node
+@export var LeadSlot2: Node
 @export var EnemyDeckSlot: Node
 @export var EnemyFieldHandSlot1: Node
 @export var EnemyFieldHandSlot2: Node
 @export var EnemyFieldHandSlot3: Node
 @export var EnemyFieldHandSlot4: Node
-@export var LeadSlot1: Node
-@export var LeadSlot2: Node
+
+@export var interval_seconds: float = 1
 
 var timer: float = 0
 var slots: Array[Node] = []
@@ -27,13 +28,24 @@ func _process(delta: float) -> void:
 	timer += delta
 	
 	if timer >= interval_seconds:
-		_execute_function()
 		timer = 0.0
+		
+		action()
 
-func _execute_function() -> void:
+func action() -> void:
+	if Global.current_state != Global.GameState.PLAYING:
+		return
+	
+	var complete = true
+	
 	for slot in slots:
-		var card = slot.get_child(0)
+		var card = slot.get_child(0) if slot.get_child_count() > 0 else null
 		if card:
 			GameManager._selected_card(card, true)
-		else:
+			complete = false
+		elif GameManager.enemy_card_deck.size() > 0:
 			GameManager._draw_enemy_card()
+			complete = false
+	
+	if complete:
+		print("CPUの手札がなくなりました。")

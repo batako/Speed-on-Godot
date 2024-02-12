@@ -1,8 +1,10 @@
-class_name GameManager
 extends Node
 
 @export var CardRootNode: Node
 @export var CardScene: PackedScene
+
+@export var LeadSlot1: Node
+@export var LeadSlot2: Node
 
 @export var PlayerDeckSlot: Node
 @export var PlayerFieldHandSlot1: Node
@@ -16,8 +18,7 @@ extends Node
 @export var EnemyFieldHandSlot3: Node
 @export var EnemyFieldHandSlot4: Node
 
-@export var LeadSlot1: Node
-@export var LeadSlot2: Node
+@export var status_check_interval_seconds: float = 1
 
 var player_card_deck: Array
 var enemy_card_deck: Array
@@ -25,13 +26,23 @@ var enemy_card_deck: Array
 var lead_slot1: Dictionary = { "suit": null, "value": null }
 var lead_slot2: Dictionary = { "suit": null, "value": null }
 
-var allow_lead_card = false
+var slots: Array[Node] = []
+var field_hand_slots: Array[Node] = []
 
+var timer: float = 0
 
 func _ready() -> void:
-	setup_deck()
-	set_field_hand_slot()
-	start_round()
+	reset()
+
+
+func _process(delta: float) -> void:
+	timer += delta
+	
+	if timer >= status_check_interval_seconds:
+		timer = 0.0
+		
+		if not check_available_actions_for_player_and_enemy():
+			start_round()
 
 
 func _draw_player_card() -> void:
@@ -43,25 +54,59 @@ func _draw_enemy_card() -> void:
 
 
 func _selected_card(node: Area2D, is_cpu: bool = false) -> void:
-	if !allow_lead_card:
-		print("カードを出せません。")
-		return
-	
 	if !is_cpu and node.owner_type != node.OwnerType.PLAYER:
 		print("プレイヤーのカードではありません。")
 		return
 	
-	if is_adjacent_value(lead_slot1.value, node.value):
+	if !lead_slot1.value or is_adjacent_value(lead_slot1.value, node.value):
 		move_field_hand_to_lead(node, LeadSlot1)
-	elif is_adjacent_value(lead_slot2.value, node.value):
+	elif !lead_slot2.value or is_adjacent_value(lead_slot2.value, node.value):
 		move_field_hand_to_lead(node, LeadSlot2)
+
+
+func reset() -> void:
+	initialize_variables()
+	clear_slots()
+	setup_deck()
+	set_field_hand_slot()
+	start_round()
+
+
+func initialize_variables() -> void:
+	field_hand_slots = [
+		PlayerFieldHandSlot1,
+		PlayerFieldHandSlot2,
+		PlayerFieldHandSlot3,
+		PlayerFieldHandSlot4,
+		EnemyFieldHandSlot1,
+		EnemyFieldHandSlot2,
+		EnemyFieldHandSlot3,
+		EnemyFieldHandSlot4,
+	]
+	slots = [
+		LeadSlot1,
+		LeadSlot2,
+		PlayerDeckSlot,
+		EnemyDeckSlot,
+	]
+	slots += field_hand_slots
+	
+	lead_slot1 = { "suit": null, "value": null }
+	lead_slot2 = { "suit": null, "value": null }
+	
+	Global.current_state = Global.GameState.PLAYING
+
+
+func clear_slots() -> void:
+	for slot in slots:
+		remove_all_children(slot)
 
 
 func setup_deck() -> void:
 	var deck: Array = create_shuffled_deck()
-	var deck_half_size: int = deck.size() / 2
+	var deck_half_size: int = int(deck.size() / 2.0)
 	var player_cards: Array = deck.slice(0, deck_half_size - 1, true)
-	var enemy_cards: Array = deck.slice(deck_half_size, deck.size() - 1, true)
+	var enemy_cards: Array = deck.slice(deck_half_size, deck.size(), true)
 
 	player_card_deck = player_cards
 	enemy_card_deck = enemy_cards
@@ -90,20 +135,26 @@ func set_field_hand_slot() -> void:
 
 
 func start_round() -> void:
-	allow_lead_card = true
+	if Global.current_state != Global.GameState.PLAYING:
+		return
 	
-	set_lead_card_from_draw("player", LeadSlot1)
-	set_lead_card_from_draw("enemy", LeadSlot2)
+	set_lead_card_from_deck_or_field_hand("player", LeadSlot1)
+	set_lead_card_from_deck_or_field_hand("enemy", LeadSlot2)
 
 
-func set_lead_card_from_draw(owner_type: String, slot: Node) -> void:
+func set_lead_card_from_deck_or_field_hand(owner_type: String, slot: Node) -> void:
 	var card_deck = get_card_deck(owner_type)
 	
 	if card_deck.size() > 0:
 		var card = card_deck.pop_front()
 		set_lead_card(slot, card.suit, card.value)
 	else:
-		push_error(owner_type + " の山札はありません。")
+		var card = get_card_from_any_field_hand(owner_type)
+		if card:
+			set_lead_card(slot, card.suit, card.value)
+			card.queue_free()
+		else:
+			push_error(owner_type + " の山札と場札はありません。")
 
 
 func set_lead_card(slot: Node, suit: String, value: int) -> void:
@@ -135,6 +186,22 @@ func add_card(root_node: Node, owner_type: String, suit: String, value: int) -> 
 				push_error("不正な owner_type です。:  " + owner_type)
 		_:
 			card_instance.connect("selected_card", _selected_card.bind())
+
+
+func get_card_from_any_field_hand(owner_type: String) -> Area2D:
+	if owner_type != "player" and owner_type != "enemy":
+		push_error("不正な owner_type です。:  " + owner_type)
+		return
+	
+	var card_slots = get_field_hand_slots(owner_type)
+	return get_first_child_of_first_present_node(card_slots)
+
+
+func get_first_child_of_first_present_node(nodes: Array) -> Node:
+	for node in nodes:
+		if node.get_child_count() > 0:
+			return node.get_child(0)
+	return null
 
 
 func draw_card(owner_type: String) -> void:
@@ -205,15 +272,14 @@ func get_card_deck(owner_type: String) -> Array:
 			return []
 
 
-func is_adjacent_value(lead_value: int, value_to_check: int) -> bool:
-	if lead_value != null:
-		if value_to_check == lead_value + 1 or value_to_check == lead_value - 1:
-			return true
-		elif (lead_value == 13 and value_to_check == 1) or (lead_value == 1 and value_to_check == 13):
-			return true
-		elif value_to_check == lead_value:
-			return false
-	
+func is_adjacent_value(reference_value: int, comparison_value: int) -> bool:
+	if comparison_value == reference_value + 1 or comparison_value == reference_value - 1:
+		return true
+	elif (reference_value == 13 and comparison_value == 1) or (reference_value == 1 and comparison_value == 13):
+		return true
+	elif comparison_value == reference_value:
+		return false
+
 	return false
 
 
@@ -222,6 +288,23 @@ func move_field_hand_to_lead(node: Node, slot: Node) -> void:
 	set_lead_card(slot, node.suit, node.value)
 	node.queue_free()
 
+
 func remove_all_children(node: Node):
 	for child in node.get_children():
 		child.queue_free()
+
+
+func check_available_actions_for_player_and_enemy() -> bool:
+	var value = false
+	
+	for slot in field_hand_slots:
+		if slot.get_child_count() == 0:
+			continue
+
+		var card = slot.get_child(0)
+		if !lead_slot1.value or is_adjacent_value(lead_slot1.value, card.value):
+			value = true
+		elif !lead_slot2.value or is_adjacent_value(lead_slot2.value, card.value):
+			value = true
+	
+	return value

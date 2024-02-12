@@ -7,10 +7,12 @@
 
 [node name="Main" type="Node2D"]
 
-[node name="GameManager" type="Node" parent="." node_paths=PackedStringArray("CardRootNode", "PlayerDeckSlot", "PlayerFieldHandSlot1", "PlayerFieldHandSlot2", "PlayerFieldHandSlot3", "PlayerFieldHandSlot4", "EnemyDeckSlot", "EnemyFieldHandSlot1", "EnemyFieldHandSlot2", "EnemyFieldHandSlot3", "EnemyFieldHandSlot4", "LeadSlot1", "LeadSlot2")]
+[node name="GameManager" type="Node" parent="." node_paths=PackedStringArray("CardRootNode", "LeadSlot1", "LeadSlot2", "PlayerDeckSlot", "PlayerFieldHandSlot1", "PlayerFieldHandSlot2", "PlayerFieldHandSlot3", "PlayerFieldHandSlot4", "EnemyDeckSlot", "EnemyFieldHandSlot1", "EnemyFieldHandSlot2", "EnemyFieldHandSlot3", "EnemyFieldHandSlot4")]
 script = ExtResource("5_auip6")
 CardRootNode = NodePath("../CardRootNode")
 CardScene = ExtResource("4_h3vpj")
+LeadSlot1 = NodePath("../CardSlots/LeadSlot1")
+LeadSlot2 = NodePath("../CardSlots/LeadSlot2")
 PlayerDeckSlot = NodePath("../CardSlots/Player/PlayerDeckSlot")
 PlayerFieldHandSlot1 = NodePath("../CardSlots/Player/PlayerFieldHandSlot1")
 PlayerFieldHandSlot2 = NodePath("../CardSlots/Player/PlayerFieldHandSlot2")
@@ -21,21 +23,19 @@ EnemyFieldHandSlot1 = NodePath("../CardSlots/Enemy/EnemyFieldHandSlot1")
 EnemyFieldHandSlot2 = NodePath("../CardSlots/Enemy/EnemyFieldHandSlot2")
 EnemyFieldHandSlot3 = NodePath("../CardSlots/Enemy/EnemyFieldHandSlot3")
 EnemyFieldHandSlot4 = NodePath("../CardSlots/Enemy/EnemyFieldHandSlot4")
-LeadSlot1 = NodePath("../CardSlots/LeadSlot1")
-LeadSlot2 = NodePath("../CardSlots/LeadSlot2")
 
 [node name="CardRootNode" type="Node" parent="."]
 
-[node name="CPUComponent" type="Node" parent="." node_paths=PackedStringArray("GameManager", "EnemyDeckSlot", "EnemyFieldHandSlot1", "EnemyFieldHandSlot2", "EnemyFieldHandSlot3", "EnemyFieldHandSlot4", "LeadSlot1", "LeadSlot2")]
+[node name="CPUComponent" type="Node" parent="." node_paths=PackedStringArray("GameManager", "LeadSlot1", "LeadSlot2", "EnemyDeckSlot", "EnemyFieldHandSlot1", "EnemyFieldHandSlot2", "EnemyFieldHandSlot3", "EnemyFieldHandSlot4")]
 script = ExtResource("3_p4jsp")
 GameManager = NodePath("../GameManager")
+LeadSlot1 = NodePath("../CardSlots/LeadSlot1")
+LeadSlot2 = NodePath("../CardSlots/LeadSlot2")
 EnemyDeckSlot = NodePath("../CardSlots/Enemy/EnemyDeckSlot")
 EnemyFieldHandSlot1 = NodePath("../CardSlots/Enemy/EnemyFieldHandSlot1")
 EnemyFieldHandSlot2 = NodePath("../CardSlots/Enemy/EnemyFieldHandSlot2")
 EnemyFieldHandSlot3 = NodePath("../CardSlots/Enemy/EnemyFieldHandSlot3")
 EnemyFieldHandSlot4 = NodePath("../CardSlots/Enemy/EnemyFieldHandSlot4")
-LeadSlot1 = NodePath("../CardSlots/LeadSlot1")
-LeadSlot2 = NodePath("../CardSlots/LeadSlot2")
 
 [node name="CardSlots" type="Node" parent="."]
 

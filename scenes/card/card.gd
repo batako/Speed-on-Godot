@@ -37,6 +37,9 @@ func _on_mouse_exited() -> void:
 
 
 func _on_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
+	if Global.current_state != Global.GameState.PLAYING:
+		return
+	
 	if event is InputEventMouseButton:
 		if event.is_pressed():
 			if suit == "deck":
