@@ -20,6 +20,8 @@ extends Node
 
 @export var status_check_interval_seconds: float = 1
 
+@export var CountDown: Node
+
 var player_card_deck: Array
 var enemy_card_deck: Array
 
@@ -33,6 +35,7 @@ var enemy_field_hand_slots: Array[Node] = []
 var timer: float = 0
 
 func _ready() -> void:
+	CountDown.connect("animation_finished", _on_countdown_finished.bind())
 	reset()
 
 
@@ -69,7 +72,14 @@ func _selected_card(node: Area2D, is_cpu: bool = false) -> void:
 		move_field_hand_to_lead(node, LeadSlot2)
 
 	check_victory_condition(node.owner_type_to_string())
+
+
+func _on_countdown_finished() -> void:
+	Global.current_state = Global.GameState.PLAYING
 	
+	set_lead_card_from_deck_or_field_hand("player", LeadSlot1)
+	set_lead_card_from_deck_or_field_hand("enemy", LeadSlot2)
+
 
 func reset() -> void:
 	initialize_variables()
@@ -102,8 +112,6 @@ func initialize_variables() -> void:
 	
 	lead_slot1 = { "suit": null, "value": null }
 	lead_slot2 = { "suit": null, "value": null }
-	
-	Global.current_state = Global.GameState.PLAYING
 
 
 func clear_card_slots() -> void:
@@ -144,8 +152,8 @@ func set_field_hand_slot() -> void:
 
 
 func start_round() -> void:
-	set_lead_card_from_deck_or_field_hand("player", LeadSlot1)
-	set_lead_card_from_deck_or_field_hand("enemy", LeadSlot2)
+	Global.current_state = Global.GameState.PAUSED
+	CountDown.play()
 
 
 func set_lead_card_from_deck_or_field_hand(owner_type: String, slot: Node) -> void:

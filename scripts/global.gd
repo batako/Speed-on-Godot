@@ -6,6 +6,7 @@ const POINTING = preload("res://assets/images/cursors/pointing.png")
 enum GameState {
 	MAIN_MENU,
 	PLAYING,
+	PAUSED,
 	END_GAME,
 }
 

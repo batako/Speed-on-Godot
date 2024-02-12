@@ -1,13 +1,23 @@
-[gd_scene load_steps=5 format=3 uid="uid://8xvl5u4lnkyv"]
+[gd_scene load_steps=6 format=3 uid="uid://8xvl5u4lnkyv"]
 
 [ext_resource type="Script" path="res://components/cpu_component.gd" id="3_p4jsp"]
 [ext_resource type="Texture2D" uid="uid://2rulcwbn2dek" path="res://assets/images/cards/Clubs-88x124.png" id="3_vbuhv"]
 [ext_resource type="PackedScene" uid="uid://d1kvtgj8cns7a" path="res://scenes/card/card.tscn" id="4_h3vpj"]
 [ext_resource type="Script" path="res://scripts/game_manager.gd" id="5_auip6"]
+[ext_resource type="PackedScene" uid="uid://cfrwflvuokkr4" path="res://scenes/count_down/count_down.tscn" id="5_n72ef"]
 
 [node name="Main" type="Node2D"]
 
-[node name="GameManager" type="Node" parent="." node_paths=PackedStringArray("CardRootNode", "LeadSlot1", "LeadSlot2", "PlayerDeckSlot", "PlayerFieldHandSlot1", "PlayerFieldHandSlot2", "PlayerFieldHandSlot3", "PlayerFieldHandSlot4", "EnemyDeckSlot", "EnemyFieldHandSlot1", "EnemyFieldHandSlot2", "EnemyFieldHandSlot3", "EnemyFieldHandSlot4")]
+[node name="CountDown" parent="." instance=ExtResource("5_n72ef")]
+z_index = 1
+anchors_preset = 10
+anchor_bottom = 0.0
+offset_right = 600.0
+offset_bottom = 600.0
+grow_vertical = 1
+pivot_offset = Vector2(300, 300)
+
+[node name="GameManager" type="Node" parent="." node_paths=PackedStringArray("CardRootNode", "LeadSlot1", "LeadSlot2", "PlayerDeckSlot", "PlayerFieldHandSlot1", "PlayerFieldHandSlot2", "PlayerFieldHandSlot3", "PlayerFieldHandSlot4", "EnemyDeckSlot", "EnemyFieldHandSlot1", "EnemyFieldHandSlot2", "EnemyFieldHandSlot3", "EnemyFieldHandSlot4", "CountDown")]
 script = ExtResource("5_auip6")
 CardRootNode = NodePath("../CardRootNode")
 CardScene = ExtResource("4_h3vpj")
@@ -23,6 +33,7 @@ EnemyFieldHandSlot1 = NodePath("../CardSlots/Enemy/EnemyFieldHandSlot1")
 EnemyFieldHandSlot2 = NodePath("../CardSlots/Enemy/EnemyFieldHandSlot2")
 EnemyFieldHandSlot3 = NodePath("../CardSlots/Enemy/EnemyFieldHandSlot3")
 EnemyFieldHandSlot4 = NodePath("../CardSlots/Enemy/EnemyFieldHandSlot4")
+CountDown = NodePath("../CountDown")
 
 [node name="CardRootNode" type="Node" parent="."]
 
