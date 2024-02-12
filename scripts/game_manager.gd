@@ -218,5 +218,10 @@ func is_adjacent_value(lead_value: int, value_to_check: int) -> bool:
 
 
 func move_field_hand_to_lead(node: Node, slot: Node) -> void:
+	remove_all_children(slot)
 	set_lead_card(slot, node.suit, node.value)
 	node.queue_free()
+
+func remove_all_children(node: Node):
+	for child in node.get_children():
+		child.queue_free()
