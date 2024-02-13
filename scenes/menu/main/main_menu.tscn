@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://br7hkoybk2tch"]
+[gd_scene load_steps=4 format=3 uid="uid://br7hkoybk2tch"]
 
 [ext_resource type="Script" path="res://scenes/menu/main/main_menu.gd" id="1_de3fe"]
+[ext_resource type="PackedScene" uid="uid://xpxoediubkgv" path="res://scenes/menu/options/options_menu.tscn" id="3_cddi2"]
 
 [sub_resource type="SystemFont" id="SystemFont_p4m7w"]
 font_names = PackedStringArray("Impact")
@@ -74,3 +75,7 @@ text = "Options"
 [node name="Quit" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer"]
 layout_mode = 2
 text = "Quit"
+
+[node name="OptionsMenu" parent="." instance=ExtResource("3_cddi2")]
+visible = false
+layout_mode = 1
