@@ -1,14 +1,14 @@
 [gd_scene load_steps=6 format=3 uid="uid://8xvl5u4lnkyv"]
 
-[ext_resource type="Script" path="res://components/cpu_component.gd" id="3_p4jsp"]
-[ext_resource type="Texture2D" uid="uid://2rulcwbn2dek" path="res://assets/images/cards/Clubs-88x124.png" id="3_vbuhv"]
-[ext_resource type="PackedScene" uid="uid://d1kvtgj8cns7a" path="res://scenes/card/card.tscn" id="4_h3vpj"]
-[ext_resource type="Script" path="res://scripts/game_manager.gd" id="5_auip6"]
-[ext_resource type="PackedScene" uid="uid://cfrwflvuokkr4" path="res://scenes/count_down/count_down.tscn" id="5_n72ef"]
+[ext_resource type="PackedScene" uid="uid://cfrwflvuokkr4" path="res://scenes/count_down/count_down.tscn" id="1_prnou"]
+[ext_resource type="Script" path="res://scripts/game_manager.gd" id="2_dx7ma"]
+[ext_resource type="PackedScene" uid="uid://d1kvtgj8cns7a" path="res://scenes/card/card.tscn" id="3_3737d"]
+[ext_resource type="Script" path="res://components/cpu_component.gd" id="4_kvxoc"]
+[ext_resource type="Texture2D" uid="uid://2rulcwbn2dek" path="res://assets/images/cards/Clubs-88x124.png" id="5_nempy"]
 
-[node name="Main" type="Node2D"]
+[node name="GamePlay" type="Node2D"]
 
-[node name="CountDown" parent="." instance=ExtResource("5_n72ef")]
+[node name="CountDown" parent="." instance=ExtResource("1_prnou")]
 z_index = 1
 anchors_preset = 10
 anchor_bottom = 0.0
@@ -18,9 +18,9 @@ grow_vertical = 1
 pivot_offset = Vector2(300, 300)
 
 [node name="GameManager" type="Node" parent="." node_paths=PackedStringArray("CardRootNode", "LeadSlot1", "LeadSlot2", "PlayerDeckSlot", "PlayerFieldHandSlot1", "PlayerFieldHandSlot2", "PlayerFieldHandSlot3", "PlayerFieldHandSlot4", "EnemyDeckSlot", "EnemyFieldHandSlot1", "EnemyFieldHandSlot2", "EnemyFieldHandSlot3", "EnemyFieldHandSlot4", "CountDown")]
-script = ExtResource("5_auip6")
+script = ExtResource("2_dx7ma")
 CardRootNode = NodePath("../CardRootNode")
-CardScene = ExtResource("4_h3vpj")
+CardScene = ExtResource("3_3737d")
 LeadSlot1 = NodePath("../CardSlots/LeadSlot1")
 LeadSlot2 = NodePath("../CardSlots/LeadSlot2")
 PlayerDeckSlot = NodePath("../CardSlots/Player/PlayerDeckSlot")
@@ -38,7 +38,7 @@ CountDown = NodePath("../CountDown")
 [node name="CardRootNode" type="Node" parent="."]
 
 [node name="CPUComponent" type="Node" parent="." node_paths=PackedStringArray("GameManager", "LeadSlot1", "LeadSlot2", "EnemyDeckSlot", "EnemyFieldHandSlot1", "EnemyFieldHandSlot2", "EnemyFieldHandSlot3", "EnemyFieldHandSlot4")]
-script = ExtResource("3_p4jsp")
+script = ExtResource("4_kvxoc")
 GameManager = NodePath("../GameManager")
 LeadSlot1 = NodePath("../CardSlots/LeadSlot1")
 LeadSlot2 = NodePath("../CardSlots/LeadSlot2")
@@ -47,19 +47,20 @@ EnemyFieldHandSlot1 = NodePath("../CardSlots/Enemy/EnemyFieldHandSlot1")
 EnemyFieldHandSlot2 = NodePath("../CardSlots/Enemy/EnemyFieldHandSlot2")
 EnemyFieldHandSlot3 = NodePath("../CardSlots/Enemy/EnemyFieldHandSlot3")
 EnemyFieldHandSlot4 = NodePath("../CardSlots/Enemy/EnemyFieldHandSlot4")
+interval_seconds = 1.0
 
 [node name="CardSlots" type="Node" parent="."]
 
 [node name="LeadSlot1" type="Sprite2D" parent="CardSlots"]
 position = Vector2(231.2, 300)
-texture = ExtResource("3_vbuhv")
+texture = ExtResource("5_nempy")
 hframes = 5
 vframes = 3
 frame = 13
 
 [node name="LeadSlot2" type="Sprite2D" parent="CardSlots"]
 position = Vector2(368.8, 300)
-texture = ExtResource("3_vbuhv")
+texture = ExtResource("5_nempy")
 hframes = 5
 vframes = 3
 frame = 13
@@ -68,35 +69,35 @@ frame = 13
 
 [node name="PlayerDeckSlot" type="Sprite2D" parent="CardSlots/Player"]
 position = Vector2(93.6, 300)
-texture = ExtResource("3_vbuhv")
+texture = ExtResource("5_nempy")
 hframes = 5
 vframes = 3
 frame = 13
 
 [node name="PlayerFieldHandSlot1" type="Sprite2D" parent="CardSlots/Player"]
 position = Vector2(93.6, 481)
-texture = ExtResource("3_vbuhv")
+texture = ExtResource("5_nempy")
 hframes = 5
 vframes = 3
 frame = 13
 
 [node name="PlayerFieldHandSlot2" type="Sprite2D" parent="CardSlots/Player"]
 position = Vector2(231.2, 481)
-texture = ExtResource("3_vbuhv")
+texture = ExtResource("5_nempy")
 hframes = 5
 vframes = 3
 frame = 13
 
 [node name="PlayerFieldHandSlot3" type="Sprite2D" parent="CardSlots/Player"]
 position = Vector2(368.8, 481)
-texture = ExtResource("3_vbuhv")
+texture = ExtResource("5_nempy")
 hframes = 5
 vframes = 3
 frame = 13
 
 [node name="PlayerFieldHandSlot4" type="Sprite2D" parent="CardSlots/Player"]
 position = Vector2(506.4, 481)
-texture = ExtResource("3_vbuhv")
+texture = ExtResource("5_nempy")
 hframes = 5
 vframes = 3
 frame = 13
@@ -105,35 +106,35 @@ frame = 13
 
 [node name="EnemyDeckSlot" type="Sprite2D" parent="CardSlots/Enemy"]
 position = Vector2(506.4, 300)
-texture = ExtResource("3_vbuhv")
+texture = ExtResource("5_nempy")
 hframes = 5
 vframes = 3
 frame = 13
 
 [node name="EnemyFieldHandSlot1" type="Sprite2D" parent="CardSlots/Enemy"]
 position = Vector2(506.4, 119)
-texture = ExtResource("3_vbuhv")
+texture = ExtResource("5_nempy")
 hframes = 5
 vframes = 3
 frame = 13
 
 [node name="EnemyFieldHandSlot2" type="Sprite2D" parent="CardSlots/Enemy"]
 position = Vector2(368.8, 119)
-texture = ExtResource("3_vbuhv")
+texture = ExtResource("5_nempy")
 hframes = 5
 vframes = 3
 frame = 13
 
 [node name="EnemyFieldHandSlot3" type="Sprite2D" parent="CardSlots/Enemy"]
 position = Vector2(231.2, 119)
-texture = ExtResource("3_vbuhv")
+texture = ExtResource("5_nempy")
 hframes = 5
 vframes = 3
 frame = 13
 
 [node name="EnemyFieldHandSlot4" type="Sprite2D" parent="CardSlots/Enemy"]
 position = Vector2(93.6, 119)
-texture = ExtResource("3_vbuhv")
+texture = ExtResource("5_nempy")
 hframes = 5
 vframes = 3
 frame = 13
