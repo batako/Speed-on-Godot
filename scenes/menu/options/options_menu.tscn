@@ -1,9 +1,11 @@
-[gd_scene load_steps=3 format=3 uid="uid://xpxoediubkgv"]
+[gd_scene load_steps=4 format=3 uid="uid://xpxoediubkgv"]
 
 [ext_resource type="Script" path="res://scenes/menu/options/options_menu.gd" id="1_vmxj7"]
+[ext_resource type="PackedScene" uid="uid://wgd2j7mywrto" path="res://scenes/menu/settings_tab_container/settings_tab_container.tscn" id="2_blsqc"]
 
 [sub_resource type="SystemFont" id="SystemFont_kwdmj"]
 font_names = PackedStringArray("Impact")
+subpixel_positioning = 0
 
 [node name="OptionsMenu" type="Control"]
 layout_mode = 3
@@ -39,7 +41,11 @@ text = "Options"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="SettingsTabContainer" parent="MarginContainer/VBoxContainer" instance=ExtResource("2_blsqc")]
+layout_mode = 2
+size_flags_vertical = 3
+
 [node name="Back" type="Button" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
-size_flags_vertical = 10
+size_flags_vertical = 8
 text = "Back"

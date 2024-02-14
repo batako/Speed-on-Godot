@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Speed-on-Godot"
-run/main_scene="res://scenes/game_play.tscn"
+run/main_scene="res://scenes/menu/main/main_menu.tscn"
 config/features=PackedStringArray("4.2", "Forward Plus")
 config/icon="res://assets/images/icon.svg"
 
